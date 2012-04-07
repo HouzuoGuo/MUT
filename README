@@ -1,4 +1,4 @@
-MUT - an exciting Mininal Unit Test for Scala
+MUT - an exciting Minimal Unit Test for Scala
 
 ==Philosophy==
 Rather than writing specs to test a class, you write specs to test one (or a few) class Instance in MUT.
