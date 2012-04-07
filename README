@@ -1,1 +1,25 @@
-MUT is a minimal unit test framework for Scala.
+MUT - Minimal Unit Test for Scala
+
+==Highlight==
+Do you have a bunch of test cases which require similar but not identical setup?
+Do you wish to have very precise control over the abnormal conditions in test case execution?
+Do you need a unit test library that is tiny and has only one class?
+
+Look no further than MUT :-)
+
+==Features==
+Timed execution of test cases.
+Test case setup and clean-up.
+Super easy test case reset.
+Super easy and very precise control over abnormal conditions in test case.
+Single class with only around 100 lines of code!
+
+Usage example is in MutExample.scala.
+
+==Background==
+As a novice Scala learner, I started a pet project called ScalaDB (flat file DB engine in Scala, https://github.com/HouzuoGuo/ScalaDB).
+I wish to write unit test cases for ScalaDB, so I learned some Scala unit testing tools but found them:
+- large
+- inflexible test case setup
+- difficult to code for abnormal condition detection
+The above reasons drove me to write this tiny unit testing library to be used in my ScalaDB.

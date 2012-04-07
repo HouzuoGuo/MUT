@@ -20,9 +20,8 @@ class CpuMUT extends MUT {
   val cpu = new CPU
 
   override def setup {
-    // turn CPU cores on
+    // turn on one CPU core
     cpu.core1 = "on"
-    cpu.core2 = "on"
   }
 
   override def cleanup {
@@ -37,7 +36,7 @@ class CpuMUT extends MUT {
     else
       false
   } otherwise { println("CPU cannot fetch an instruction\n") }
-  timeNext("Decode instruction") {
+  next("Decode instruction") {
     if (cpu.decode())
       true
     else
@@ -58,11 +57,12 @@ class CpuMUT extends MUT {
         false
     }
   } otherwise { println("CPU cannot execute an instruction\n") }
-  next("Write result back into memory") {
+  timeNext("Write result back into memory") {
     cpu.writeback()
   } otherwise { println("CPU cannot write result back into memory") }
 
-  timeTest("CPU has been reset. Fetching instruction") {
+  timeTest("CPU has been reset. Core 2 is on. Fetching instruction") {
+    cpu.core2 = "on"
     if (cpu.fetch())
       true
     else

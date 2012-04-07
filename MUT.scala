@@ -3,6 +3,8 @@
  *
  * Your test case must extend this class.
  *
+ * Don't worry about license, do whatever you want with the source code C:
+ *
  * === Very important - Definition of "test step" ===
  * Break down of a test case. A step is a block of code in test case which could
  * cause a test case to fail.
@@ -76,7 +78,7 @@ class MUT {
    */
   def timeNext(name: String)(nextStep: => Boolean): MutResult = {
     val begin = System.currentTimeMillis()
-    val result = test(name)(nextStep)
+    val result = next(name)(nextStep)
     reportTime(name, System.currentTimeMillis() - begin)
     result
   }
