@@ -1,25 +1,46 @@
-MUT - Minimal Unit Test for Scala
+MUT - an exciting Mininal Unit Test for Scala
 
-==Highlight==
-Do you have a bunch of test cases which require similar but not identical setup?
-Do you wish to have very precise control over the abnormal conditions in test case execution?
-Do you need a unit test library that is tiny and has only one class?
+==Philosophy==
+Rather than writing specs to test a class, you write specs to test one (or a few) class Instance in MUT.
 
-Look no further than MUT :-)
+==Why?==
+Imagine you are writing a unit test for a class which -
+- Has two attributes, a1 and a2.
+- Has two operations, o1 and o2.
+- Each operation has one spec: o1->s1, o2->s2.
+- Each operation changes the state of the class instance.
+
+To test the class in every of its state, you may want to setup three tests:
+
+-- 1 --
+1. Initialize a1. (The class instance is now at "original" state)
+2. Test o1 against spec s1.
+3. Change the value of a2. Then
+4. Test o2 against spec s2.
+
+-- 2 --
+1. Maintain the current state of the class instance.
+2. Change the value of a2. Then
+3. Test o1 against spec s1.
+4. Test o2 against spec s2.
+
+-- 3 --
+1. Revert the class instance to its original state
+2. Test o2 against spec s2.
+3. Test o1 against spec s1.
+
+I am still a novice Scala user, so far I found it very difficult to implement the above test in an understandable, expressive way using the existing unit test frameworks (ScalaCheck, ScalaTest, specs2, etc.) due to the complexity of the changes in the class instance state.
+Thus, I came up with the idea of "writing test cases against class instance", together with this minimal unit testing tool.
+An example of its usage and "testing against instance" can be found at MutExample.scala.
+
 
 ==Features==
+Test specs on (usually one) class instance, rather different instance in each spec.
+Easy and automated test setup and clean-up.
+Automated test re-setup.
+Gives you very precise control over abnormal conditions during the tests of class instance.
 Timed execution of test cases.
-Test case setup and clean-up.
-Super easy test case reset.
-Super easy and very precise control over abnormal conditions in test case.
-Single class with only around 100 lines of code!
-
-Usage example is in MutExample.scala.
+All the features in only around 100 lines of code!
 
 ==Background==
-As a novice Scala learner, I started a pet project called ScalaDB (flat file DB engine in Scala, https://github.com/HouzuoGuo/ScalaDB).
-I wish to write unit test cases for ScalaDB, so I learned some Scala unit testing tools but found them:
-- large
-- inflexible test case setup
-- difficult to code for abnormal condition detection
-The above reasons drove me to write this tiny unit testing library to be used in my ScalaDB.
+I made this for testing my pet Scala project ScalaDB (flat file DB engine in Scala, https://github.com/HouzuoGuo/ScalaDB).
