@@ -33,7 +33,6 @@ I am still a novice Scala user, so far I found it very difficult to implement th
 Thus, I came up with the idea of "writing test cases against class instance", together with this minimal unit testing tool.
 An example of its usage and "testing against instance" can be found at MutExample.scala.
 
-
 ==Features==
 Test specs on (usually one) class instance, rather different instance in each spec.
 Easy and automated test setup and clean-up.
@@ -44,3 +43,7 @@ All the features in only around 100 lines of code!
 
 ==Background==
 I made this for testing my pet Scala project ScalaDB (flat file DB engine in Scala, https://github.com/HouzuoGuo/ScalaDB).
+Usage of MUT in the pet project is here:
+https://github.com/HouzuoGuo/ScalaDB/tree/master/src/test
+(Good place to have a look at how MUT is used in real scenarios.)
+
