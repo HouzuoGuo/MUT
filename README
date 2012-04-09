@@ -1,49 +1,105 @@
-MUT - an exciting Minimal Unit Test for Scala
+MUT - A more interesting way to test your Scala classes.
 
-==Philosophy==
-Rather than writing specs to test a class, you write specs to test one (or a few) class Instance in MUT.
+==== Idea ====
+Using MUT, rather than writing specifications to test a class, you write
+specifications to test how one (or a few) class instance(s) behave in
+different states.
 
-==Why?==
-Imagine you are writing a unit test for a class which -
-- Has two attributes, a1 and a2.
-- Has two operations, o1 and o2.
-- Each operation has one spec: o1->s1, o2->s2.
-- Each operation changes the state of the class instance.
+==== Why use MUT ====
+Suppose that you have a class which has:
+- Operations (change the state of class)
+- Specifications (documented behaviors of class in different states)
+And the state of class is determined by the value of the class attributes.
+There are two specifications which from two perspectives define the behavior
+of an operation that transforms the class instance's state from S1 to S2
+then to S3.
+Our goal is to verify the correctness of the class instance in each of the
+states against the two specifications.
+Using other unit testing tool, you may need to write four tests:
+Test 1 - setup an instance at state S1 and test against spec 1
+Test 2 - setup an instance at state S1, execute the operation to change the
+state to S2 then test against spec 1
+Test 3 - setup an instance at state S1, execute the operation to
+change to state to S2, execute again to chance to state S3 then test against
+spec 1.
+Test 4 - setup an instance at state S1 and test against spec 2
 
-To test the class in every of its state, you may want to setup three tests:
+MUT is thus designed to eliminate the need of the repetitive class instance
+setup and states transition. The above three tests will be written as the
+following MUT test:
 
--- 1 --
-1. Initialize a1. (The class instance is now at "original" state)
-2. Test o1 against spec s1.
-3. Change the value of a2. Then
-4. Test o2 against spec s2.
+test("Test 1") { // instance now at state 1
+  test against spec 1
+}
+next("Test 2") { // instance now at state 2
+  execute the operation
+  test against spec 1
+}
+next("Test 3") { // instance now at state 3
+  execute the operation
+  test against spec 1
+}
+test("Test 4") { // instance now at state 1
+  test against spec 2
+}
+cleanup
 
--- 2 --
-1. Maintain the current state of the class instance.
-2. Change the value of a2. Then
-3. Test o1 against spec s1.
-4. Test o2 against spec s2.
+==== How To Use MUT ====
+class MyMutTest extends MUT {
+  var instance: MyClass = null
+  override def setup {
+    // Setup your instance(s)
+    instance = new MyClass
+  }
+  override def cleanup {
+    // Clean up for the whole test
+    if (instance != null) // You must have this line
+      instance.close().deleteTempFile()
+  }
+  test("Spec1 - instance should behave like A") {
+    instance.operation(123)
+    if (instance state is like A)
+      true
+    else
+      false
+  } otherwise {
+    // Help to diagnose the problem when the preceding block falsed
+    println("instance has the incorrect state because of GGG")
+    // Skip all the following "next(){}" tests
+    halt("Very serious error!! Shall not proceed to the next state tests!")
+  }
+  next("Sepc1 - instance should behave like B") {
+    instance.operation(234)
+    if (instance state is like B)
+      true
+    else
+      false
+  } otherwise { println("instance has the incorrect state") }
+  // Following "test(){}", You can have any number of "next(){}" tests
+  // "otherwise{}" block is not compulsory
+  next("...") { ... }
+  // Call test(){} will cleanup then re-setup
+  test("Spec2 - instance should behave like C") {
+    ...
+  }
+  // You can also use "timeTest" and "timeNext" instead of "test" and "next"
+  // to print out the time taken to complete the test.
+  cleanup // Do not forget this line
+}
+==== Author ====
+Houzuo (Howard) Guo
+http://twitter.com/#!/hzguo
+http://www.linkedin.com/pub/houzuo-guo/27/b62/2b1
+https://github.com/HouzuoGuo
 
--- 3 --
-1. Revert the class instance to its original state
-2. Test o2 against spec s2.
-3. Test o1 against spec s1.
+==== License ====
+Use the source code in anyway you want, but please retain the author
+information, in case the user of your test code needs technical support.
 
-As a novice Scala user, I've found it very difficult to implement the above test in an understandable, expressive way using the existing unit test frameworks (ScalaCheck, ScalaTest, specs2, etc.) due to the complexity of the changes in the class instance states.
-Thus, I came up with the idea of "writing test cases against class instance", together with this minimal unit testing tool.
-An example of its usage and "testing against instance" can be found at MutExample.scala.
-
-==Features==
-Test specs on (usually one) class instance, rather different instances in each spec.
-Easy and automated test setup and clean-up.
-Automated test re-setup.
-Gives you very precise control over abnormal conditions during changing of the instance's internal states.
-Timed execution of test cases.
-All the features in only around 100 lines of code!
-
-==Background==
-I made this for testing my pet Scala project ScalaDB (flat file DB engine in Scala, https://github.com/HouzuoGuo/ScalaDB).
+==== Background ====
+The idea of MUT originated from designing a testing tool for my pet Scala
+project ScalaDB:
+flat file DB engine in Scala - https://github.com/HouzuoGuo/ScalaDB
 Usage of MUT in the pet project is here:
 https://github.com/HouzuoGuo/ScalaDB/tree/master/src/test
-(Good place to have a look at how MUT is used in real scenarios.)
-
+(Good place to have a look at how MUT is used in real scenarios)
