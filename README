@@ -78,7 +78,7 @@ class MyMutTest extends MUT {
   // Following "test(){}", You can have any number of "next(){}" tests
   // "otherwise{}" block is not compulsory
   next("...") { ... }
-  // Call test(){} will cleanup then re-setup
+  // Call "test(){}" will cleanup then re-setup
   test("Spec2 - instance should behave like C") {
     ...
   }
