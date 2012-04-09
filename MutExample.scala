@@ -68,7 +68,8 @@ class CpuMUT extends MUT {
     else
       false
   } otherwise { println("CPU cannot fetch an instruction") }
-  halt()
+
+  cleanup
 }
 
 object MutExample {

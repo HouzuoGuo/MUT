@@ -19,7 +19,8 @@
  * then to S3.
  * Our goal is to verify the correctness of the class instance in each of the
  * states against the two specifications.
- * Using other unit testing tool, you may need to write four tests:
+ * Using the popular unit testing tools, such as ScalaCheck, ScalaTest, specs2,
+ * you may need to write four tests:
  * Test 1 - setup an instance at state S1 and test against spec 1
  * Test 2 - setup an instance at state S1, execute the operation to change the
  * state to S2 then test against spec 1
@@ -63,7 +64,7 @@
  *   }
  *
  *   test("Spec1 - instance should behave like A") {
- *     instance.operation(123)
+ *     instance.operation(123) // instance state transforms into S1
  *     if (instance state is like A)
  *       true
  *     else
@@ -74,8 +75,8 @@
  *     // Skip all the following "next(){}" tests
  *     halt("Very serious error!! Shall not proceed to the next state tests!")
  *   }
- *   next("Sepc1 - instance should behave like B") {
- *     instance.operation(234)
+ *   next("Sepc1 - At state S1, instance should behave like B") {
+ *     instance.operation(234) // instance state transforms into S2
  *     if (instance state is like B)
  *       true
  *     else
@@ -148,7 +149,8 @@ class MUT {
   def timeNext(name: String)(nextStep: => Boolean): MutResult = {
     val begin = System.nanoTime()
     val result = next(name)(nextStep)
-    reportTime(name, System.nanoTime() - begin)
+    if (continue)
+      reportTime(name, System.nanoTime() - begin)
     result
   }
 
