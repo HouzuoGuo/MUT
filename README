@@ -15,7 +15,8 @@ of an operation that transforms the class instance's state from S1 to S2
 then to S3.
 Our goal is to verify the correctness of the class instance in each of the
 states against the two specifications.
-Using other unit testing tool, you may need to write four tests:
+Using the popular unit testing tools, such as ScalaCheck, ScalaTest, specs2,
+you may need to write four tests:
 Test 1 - setup an instance at state S1 and test against spec 1
 Test 2 - setup an instance at state S1, execute the operation to change the
 state to S2 then test against spec 1
